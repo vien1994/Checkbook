@@ -1,5 +1,6 @@
 package com.example.vtwhaler.checkbookv2;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 
 import static com.example.vtwhaler.checkbookv2.Constants.FIRST_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.FOURTH_COLUMN;
+import static com.example.vtwhaler.checkbookv2.Constants.ID_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.SECOND_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.THIRD_COLUMN;
 
@@ -48,9 +50,12 @@ public class ListDataActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3)
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id)
             {
-                toastMessage("Worked!");
+                toastMessage("ListData works");
+                Intent intent = new Intent(ListDataActivity.this, EditTransaction.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
     }
@@ -63,10 +68,11 @@ public class ListDataActivity extends AppCompatActivity {
         while(data.moveToNext()) {
 
             HashMap<String,String> temp=new HashMap<String, String>();
-            temp.put(FIRST_COLUMN, data.getString(4)); //modify getData so this grabs date first (index 4)
-            temp.put(SECOND_COLUMN, data.getString(1));
-            temp.put(THIRD_COLUMN, data.getString(3));
-            temp.put(FOURTH_COLUMN, String.valueOf(formatter.format(data.getDouble(2))));
+            temp.put(ID_COLUMN, data.getString(0)); //ID
+            temp.put(FIRST_COLUMN, data.getString(4)); //Date
+            temp.put(SECOND_COLUMN, data.getString(1)); //Category (Such as food)
+            temp.put(THIRD_COLUMN, data.getString(3)); //Details of Transaction
+            temp.put(FOURTH_COLUMN, String.valueOf(formatter.format(data.getDouble(2)))); //Amount Spent
             list.add(temp);
 
         }

@@ -12,23 +12,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.InvocationTargetException;
+
+import java.lang.reflect.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.vtwhaler.checkbookv2.Constants.FIRST_COLUMN;
-import static com.example.vtwhaler.checkbookv2.Constants.ID_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.SECOND_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.THIRD_COLUMN;
 
-/**
- * Created by VTWhaler on 8/10/2017.
- */
-
-public class ListFoodActivity extends ParentListClass {
-
+public class ParentListClass extends AppCompatActivity {
     private ArrayList<HashMap<String, String>> list;
     private static final String TAG = "ListDataActivity";
 
@@ -38,20 +33,21 @@ public class ListFoodActivity extends ParentListClass {
     private TextView textTotal;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
         mListView = (ListView) findViewById(R.id.listView);
         textTotal = (TextView) findViewById(R.id.textTotal);
         mDatabaseHelper = new DatabaseHelper(this);
 
-        populateListView();
+    }
 
+    private void itemClickListener() {
         mListView.setOnItemClickListener ( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
                 toastMessage(mListView.getItemAtPosition(position).toString());
-                Intent intent = new Intent(ListFoodActivity.this, EditTransaction.class);
+                Intent intent = new Intent(ParentListClass.this, EditTransaction.class);
                 intent.putExtra("id", mListView.getItemAtPosition(position).toString());
                 startActivity(intent);
 
@@ -59,31 +55,42 @@ public class ListFoodActivity extends ParentListClass {
         });
     }
 
-    public void populateListView() {
-        Cursor data = mDatabaseHelper.getFood();
-        list = new ArrayList<HashMap<String, String>>();
-        while (data.moveToNext()) {
+    void populateListView(String methodName)throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Log.d(TAG, "populateListView: Displaying data in the ListView");
 
-            HashMap<String, String> temp = new HashMap<String, String>();
-            temp.put(ID_COLUMN, data.getString(0)); //ID
-            temp.put(FIRST_COLUMN, data.getString(4));
-            temp.put(SECOND_COLUMN, data.getString(3));
-            temp.put(THIRD_COLUMN, String.valueOf(formatter.format(data.getDouble(2))));
-            list.add(temp);
+            Cursor data = runMethod(mDatabaseHelper, methodName);
+            //Cursor data = mDatabaseHelper.getFood();
+            list = new ArrayList<HashMap<String, String>>();
+            while (data.moveToNext()) {
 
-        }
-        data.close();
+                HashMap<String, String> temp = new HashMap<String, String>();
+                temp.put(FIRST_COLUMN, data.getString(4));
+                temp.put(SECOND_COLUMN, data.getString(3));
+                temp.put(THIRD_COLUMN, String.valueOf(formatter.format(data.getDouble(2))));
+                list.add(temp);
 
-        String total = "Total: " + mDatabaseHelper.getTotal("food");
-        textTotal.setText(total);
+            }
+            data.close();
 
-        ListViewAdapters adapter = new ListViewAdapters(this, list);
-        mListView.setAdapter(adapter);
+            String total = "Total: " + mDatabaseHelper.getTotal("food");
+            textTotal.setText(total);
+
+            ListViewAdapters adapter = new ListViewAdapters(this, list);
+            mListView.setAdapter(adapter);
 
     }
 
-    public void toastMessage(String msg) {
-        super.toastMessage(msg);
+    private static Cursor runMethod(Object instance, String methodName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+            Method method = instance.getClass().getMethod(methodName);
+            return (Cursor) method.invoke(instance);
+
     }
+
+    void toastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+
 
 }
