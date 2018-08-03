@@ -150,6 +150,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryUpd);
     }
 
+    public void updateTransaction(int id, String date, String tag, double newAmount, double oldAmount) {
+        addBal(oldAmount);
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryUpd = "UPDATE " + TABLE_EXP + " SET " + expDate + " = '" + date + "'" + ", " + expTag + " = '" + tag + "'" + ", " + expAmt + " = '" + newAmount + "' WHERE ID = " + id ;
+        db.execSQL(queryUpd);
+        addTransactionBal(newAmount);
+
+
+    }
+
 
     public boolean deleteAllData() { //Deletes all Transactions. This is mostly used for debugging purposes during development.
         SQLiteDatabase db = this.getWritableDatabase();
