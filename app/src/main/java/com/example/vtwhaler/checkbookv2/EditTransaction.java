@@ -64,8 +64,8 @@ public class EditTransaction extends AppCompatActivity {
                     double amt = Double.parseDouble(newAmt);
 
                     if (editDate.length() != 0 && editTag.length() != 0 && editAmt.length() != 0) {
-                       mDatabaseHelper.updateTransaction(id, newDate, newTag, amt, originalAmount); //IT ADDS THE ORIGINAL AMOUNT EVERYTIME THEY PRESS THE BUTTON WHEN IT SHOULD ONLY DO IT ONCE!
-
+                        mDatabaseHelper.updateTransaction(id, newDate, newTag, amt); //IT ADDS THE ORIGINAL AMOUNT EVERYTIME THEY PRESS THE BUTTON WHEN IT SHOULD ONLY DO IT ONCE!
+                        toastMessage("Transaction and Balance Updated!");
 
                     }
                     else {

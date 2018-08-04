@@ -150,9 +150,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryUpd);
     }
 
-    public void updateTransaction(int id, String date, String tag, double newAmount, double oldAmount) {
-        addBal(oldAmount);
+    public void updateTransaction(int id, String date, String tag, double newAmount) {
+
         SQLiteDatabase db = this.getWritableDatabase();
+        String queryRefund = "SELECT " + expAmt + " FROM " + TABLE_EXP + " WHERE ID = " + id;
+        Cursor data = db.rawQuery(queryRefund, null);
+        data.moveToNext();
+        double oldAmt = data.getDouble(0);
+        addBal(oldAmt);
+
         String queryUpd = "UPDATE " + TABLE_EXP + " SET " + expDate + " = '" + date + "'" + ", " + expTag + " = '" + tag + "'" + ", " + expAmt + " = '" + newAmount + "' WHERE ID = " + id ;
         db.execSQL(queryUpd);
         addTransactionBal(newAmount);
