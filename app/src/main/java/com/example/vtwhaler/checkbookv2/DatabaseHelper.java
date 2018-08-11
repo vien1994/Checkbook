@@ -150,7 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryUpd);
     }
 
-    public void updateTransaction(int id, String date, String tag, double newAmount) {
+    public void updateTransaction(int id, String date, String tag, double newAmount, String category) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         String queryRefund = "SELECT " + expAmt + " FROM " + TABLE_EXP + " WHERE ID = " + id;
@@ -159,7 +159,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         double oldAmt = data.getDouble(0);
         addBal(oldAmt);
 
-        String queryUpd = "UPDATE " + TABLE_EXP + " SET " + expDate + " = '" + date + "'" + ", " + expTag + " = '" + tag + "'" + ", " + expAmt + " = '" + newAmount + "' WHERE ID = " + id ;
+        String queryUpd = "UPDATE " + TABLE_EXP
+                + " SET " + expDate + " = '" + date + "'" + ", "
+                + expTag + " = '" + tag + "'" + ", "
+                + expAmt + " = '" + newAmount + "' , "
+                + expCat + " = '" + category + "' WHERE ID = " + id ;
         db.execSQL(queryUpd);
         addTransactionBal(newAmount);
 

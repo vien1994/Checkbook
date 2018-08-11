@@ -31,5 +31,6 @@
     <string name="ListDataLabel">All Transactions</string>
     <string name="textShake">Shake Me!</string>
     <string name="updateButton">Update</string>
+    <string name="details">Details:</string>
 
 </resources>

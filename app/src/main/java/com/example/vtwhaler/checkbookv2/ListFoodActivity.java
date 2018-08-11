@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.vtwhaler.checkbookv2.Constants.FIRST_COLUMN;
+import static com.example.vtwhaler.checkbookv2.Constants.FOURTH_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.ID_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.SECOND_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.THIRD_COLUMN;
@@ -30,7 +31,6 @@ import static com.example.vtwhaler.checkbookv2.Constants.THIRD_COLUMN;
 public class ListFoodActivity extends ParentListClass {
 
     private ArrayList<HashMap<String, String>> list;
-    private static final String TAG = "ListDataActivity";
 
     DatabaseHelper mDatabaseHelper;
     NumberFormat formatter = new DecimalFormat("#0.00");
@@ -50,7 +50,6 @@ public class ListFoodActivity extends ParentListClass {
         mListView.setOnItemClickListener ( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-                toastMessage(mListView.getItemAtPosition(position).toString());
                 Intent intent = new Intent(ListFoodActivity.this, EditTransaction.class);
                 intent.putExtra("id", mListView.getItemAtPosition(position).toString());
                 startActivity(intent);
@@ -64,11 +63,12 @@ public class ListFoodActivity extends ParentListClass {
         list = new ArrayList<HashMap<String, String>>();
         while (data.moveToNext()) {
 
-            HashMap<String, String> temp = new HashMap<String, String>();
+            HashMap<String,String> temp=new HashMap<String, String>();
             temp.put(ID_COLUMN, data.getString(0)); //ID
-            temp.put(FIRST_COLUMN, data.getString(4));
-            temp.put(SECOND_COLUMN, data.getString(3));
-            temp.put(THIRD_COLUMN, String.valueOf(formatter.format(data.getDouble(2))));
+            temp.put(FIRST_COLUMN, data.getString(4)); //Date
+            temp.put(SECOND_COLUMN, data.getString(1)); //Category (Such as food)
+            temp.put(THIRD_COLUMN, data.getString(3)); //Details of Transaction
+            temp.put(FOURTH_COLUMN, String.valueOf(formatter.format(data.getDouble(2)))); //Amount Spent
             list.add(temp);
 
         }

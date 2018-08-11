@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.vtwhaler.checkbookv2.Constants.FIRST_COLUMN;
+import static com.example.vtwhaler.checkbookv2.Constants.FOURTH_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.SECOND_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.THIRD_COLUMN;
 
@@ -63,9 +64,9 @@ public class ListViewAdapters extends BaseAdapter {
         txtThird=(TextView) convertView.findViewById(R.id.amount);
 
         HashMap<String, String> map=list.get(position);
-        txtFirst.setText(map.get(FIRST_COLUMN));
-        txtSecond.setText(map.get(SECOND_COLUMN));
-        txtThird.setText(map.get(THIRD_COLUMN));
+        txtFirst.setText(map.get(FIRST_COLUMN)); // First column is the Date
+        txtSecond.setText(map.get(THIRD_COLUMN)); // Second column is the tag/details
+        txtThird.setText(map.get(FOURTH_COLUMN)); // Fourth Column is amt and Third is the category.
 
         return convertView;
     }

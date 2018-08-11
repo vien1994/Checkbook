@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.vtwhaler.checkbookv2.Constants.FIRST_COLUMN;
+import static com.example.vtwhaler.checkbookv2.Constants.FOURTH_COLUMN;
+import static com.example.vtwhaler.checkbookv2.Constants.ID_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.SECOND_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.THIRD_COLUMN;
 
@@ -51,9 +53,11 @@ public class ListMiscActivity extends AppCompatActivity {
         while(data.moveToNext()) {
 
             HashMap<String,String> temp=new HashMap<String, String>();
-            temp.put(FIRST_COLUMN, data.getString(4));
-            temp.put(SECOND_COLUMN, data.getString(3));
-            temp.put(THIRD_COLUMN, String.valueOf(formatter.format(data.getDouble(2))));
+            temp.put(ID_COLUMN, data.getString(0)); //ID
+            temp.put(FIRST_COLUMN, data.getString(4)); //Date
+            temp.put(SECOND_COLUMN, data.getString(1)); //Category (Such as food)
+            temp.put(THIRD_COLUMN, data.getString(3)); //Details of Transaction
+            temp.put(FOURTH_COLUMN, String.valueOf(formatter.format(data.getDouble(2)))); //Amount Spent
             list.add(temp);
 
         }

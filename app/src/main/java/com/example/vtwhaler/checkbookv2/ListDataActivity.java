@@ -47,15 +47,13 @@ public class ListDataActivity extends AppCompatActivity {
 
         populateListView();
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        mListView.setOnItemClickListener ( new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id)
-            {
-                toastMessage("ListData works");
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
                 Intent intent = new Intent(ListDataActivity.this, EditTransaction.class);
-                intent.putExtra("id", id);
+                intent.putExtra("id", mListView.getItemAtPosition(position).toString());
                 startActivity(intent);
+
             }
         });
     }
