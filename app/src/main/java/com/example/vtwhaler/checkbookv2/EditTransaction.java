@@ -23,7 +23,7 @@ import java.text.NumberFormat;
 public class EditTransaction extends AppCompatActivity  {
 
     DatabaseHelper mDatabaseHelper;
-    private Button btnUpdate;
+    private Button btnUpdate, btnDelete;
     private EditText editDate, editTag, editAmt, editCat;
 
     int id = 0;
@@ -44,17 +44,25 @@ public class EditTransaction extends AppCompatActivity  {
         mDatabaseHelper = new DatabaseHelper(this);
 
         String extra[] = getIntent().getExtras().get("id").toString().split(",");
-        String category = extra[0].substring(8, extra[0].length());
-        String tag = extra[1].substring(7, extra[1].length());
-        id = Integer.parseInt( extra[2].substring(4,extra[2].length()));
-        String date = extra[3].substring(7, extra[3].length());
-        String originalAmountString = extra[4].substring(8, extra[4].length() -1);
+        toastMessage(getIntent().getExtras().get("id").toString());
+//        String category = extra[0].substring(8, extra[0].length());
+//        String tag = extra[1].substring(7, extra[1].length());
+//        id = Integer.parseInt( extra[2].substring(4,extra[2].length()));
+//        String date = extra[3].substring(7, extra[3].length());
+//        String originalAmountString = extra[4].substring(8, extra[4].length() -1);
+
+        String category ="Category";
+        String tag = "Tag";
+       final int id = 0;
+        String date = "Date";
+        String originalAmountString = "amt";
 
         editDate = (EditText) findViewById(R.id.editDate);
         editTag = (EditText) findViewById(R.id.editTag);
         editAmt = (EditText) findViewById(R.id.editAmt);
         editCat = (EditText) findViewById(R.id.editCat);
-        btnUpdate = (Button) findViewById(R.id.button_update);
+        btnUpdate = (Button) findViewById(R.id.button_update);;
+        btnDelete = (Button) findViewById(R.id.button_delete);
 
         editDate.setText(date);
         editTag.setText(tag);
@@ -96,6 +104,12 @@ public class EditTransaction extends AppCompatActivity  {
             }
         });
 
+//        btnDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                toastMessage("" + id);
+//            }
+//        });
 
     }
 

@@ -1,10 +1,13 @@
 package com.example.vtwhaler.checkbookv2;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,16 @@ public class ListGasActivity extends AppCompatActivity {
         mDatabaseHelper = new DatabaseHelper(this);
 
         populateListView();
+
+        mListView.setOnItemClickListener ( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                Intent intent = new Intent(ListGasActivity.this, EditTransaction.class);
+                intent.putExtra("id", mListView.getItemAtPosition(position).toString());
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void populateListView() {
