@@ -45,17 +45,12 @@ public class EditTransaction extends AppCompatActivity  {
 
         String extra[] = getIntent().getExtras().get("id").toString().split(",");
         toastMessage(getIntent().getExtras().get("id").toString());
-//        String category = extra[0].substring(8, extra[0].length());
-//        String tag = extra[1].substring(7, extra[1].length());
-//        id = Integer.parseInt( extra[2].substring(4,extra[2].length()));
-//        String date = extra[3].substring(7, extra[3].length());
-//        String originalAmountString = extra[4].substring(8, extra[4].length() -1);
 
-        String category ="Category";
-        String tag = "Tag";
-       final int id = 0;
-        String date = "Date";
-        String originalAmountString = "amt";
+        final int id = Integer.parseInt(getIntent().getExtras().get("id").toString());
+        String category = mDatabaseHelper.getExpCat(id);
+        String tag = mDatabaseHelper.getExpTag(id);
+        String date = mDatabaseHelper.getExpDate(id);
+        String originalAmountString = mDatabaseHelper.getExpAmt(id);
 
         editDate = (EditText) findViewById(R.id.editDate);
         editTag = (EditText) findViewById(R.id.editTag);

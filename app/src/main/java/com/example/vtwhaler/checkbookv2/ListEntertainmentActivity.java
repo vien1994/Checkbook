@@ -51,7 +51,26 @@ public class ListEntertainmentActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
                 Intent intent = new Intent(ListEntertainmentActivity.this, EditTransaction.class);
-                intent.putExtra("id", mListView.getItemAtPosition(position).toString());
+                int num = 0;
+                String item = mListView.getItemAtPosition(position).toString();
+                String itemParts[] = item.split(",");
+                for(int i = 0; i < itemParts.length; i++ ) {
+                    if (itemParts[i].contains("ID=") ) {
+                        num = i;
+
+                        break;
+                    }
+                }
+                if (itemParts[num].contains("{")) {
+                    itemParts[num] = itemParts[num].substring(2);
+                }
+
+                if(itemParts[num].contains("}")) {
+                    itemParts[num] = itemParts[num].substring(1, itemParts[num].length() -1 );
+                }
+
+                String itemID = itemParts[num].substring(4);
+                intent.putExtra("id", itemID);
                 startActivity(intent);
 
             }

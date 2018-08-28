@@ -55,8 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int j) {
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_EXP);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_BALANCE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BALANCE);
         onCreate(db);
     }
 
@@ -261,6 +261,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         data.moveToNext();
         String result = String.valueOf(formatter.format(data.getDouble(0)));
         return result;
+    }
+
+    //getters here
+    public String getExpDate (int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + expDate + " FROM " + TABLE_EXP  + " WHERE ID = " + id;
+        Cursor data =db.rawQuery(query,null);
+        data.moveToNext();
+        String date = data.getString(0);
+
+        return date;
+    }
+
+    public String getExpCat (int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + expCat  + " FROM " + TABLE_EXP  + " WHERE ID = " + id;
+        Cursor data =db.rawQuery(query,null);
+        data.moveToNext();
+        String category = data.getString(0);
+
+        return category;
+    }
+
+    public String getExpAmt (int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + expAmt  + " FROM " + TABLE_EXP  + " WHERE ID = " + id;
+        Cursor data =db.rawQuery(query,null);
+        data.moveToNext();
+        String amt = data.getString(0);
+
+        return amt;
+    }
+
+    public String getExpTag (int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + expTag  + " FROM " + TABLE_EXP  + " WHERE ID = " + id;
+        Cursor data =db.rawQuery(query,null);
+        data.moveToNext();
+        String tag = data.getString(0);
+
+        return tag;
     }
 
 }
