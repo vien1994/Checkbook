@@ -31,6 +31,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String balID = "ID";
     private static final String balAmount = "BalAmt";
 
+    private static final String TABLE_PROGRESS = "Progress";
+    private static final String monthID = "monthID";
+    private static final String amtSaved = "amtSaved";
+
     private double initAmt = 0;
 
     NumberFormat formatter = new DecimalFormat("#0.00");
@@ -48,17 +52,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 expTag + " TEXT, " +
                 expDate + " TEXT);";
         db.execSQL(createTable);
+
         String createBalance = "CREATE TABLE " + TABLE_BALANCE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 balAmount + " REAL);";
         db.execSQL(createBalance);
+
+        String createProgress = "CREATE TABLE " + TABLE_PROGRESS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + monthID + " TEXT, " + amtSaved + " REAL);";
+        db.execSQL(createProgress);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int j) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BALANCE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROGRESS);
         onCreate(db);
     }
+
+
+
+    public void initProgress() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(monthID, "January");
+        contentValues.put(amtSaved, 12);
+
+        db.insert(TABLE_PROGRESS, null, contentValues);
+    }
+
+    public Cursor getProgress() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_PROGRESS;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+
+
 
     public boolean addData(String category, double amount, String tag) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -171,19 +203,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean deleteAllData() { //Deletes all Transactions. This is mostly used for debugging purposes during development.
+    public void deleteAllData() { //Deletes all Transactions. This is mostly used for debugging purposes during development.
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT SUM(" + expAmt + ") FROM " + TABLE_EXP;
         Cursor data = db.rawQuery(query,null);
         data.moveToNext();
         addBal(data.getDouble(0)); //Adds transaction total back to Balance
-        long result = db.delete(TABLE_EXP, null, null);
-        if (result == -1) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        db.execSQL("delete from "+ TABLE_EXP);
+
+    }
+
+    public boolean deleteTransaction(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + TABLE_EXP + " WHERE ID = " + id;
+        return db.delete(TABLE_EXP, "ID =" + id, null) > 0;
     }
 
     public double getBal() { //Used by other functions to grab the current balance value.
@@ -194,6 +227,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         double result = data.getDouble(1);
 
         return result;
+    }
+
+    //Date is stored as text. Work with it from there.
+    public Cursor getDataByMonth(String month, String year) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_EXP + " WHERE " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
+        Cursor data = db.rawQuery(query, null);
+        return data;
     }
 
     public Cursor getBills() { //Grab all the transactions to view under Bills Category
@@ -232,7 +274,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getGas() { //Grab all the transactions to view under Gas Category
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='gas'";
+        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='transportation'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -254,9 +296,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public String getAllTotal() { //Grabs the sum of all transactions regardless of Category
+    public String getAllTotal(String month, String year) { //Grabs the sum of all transactions regardless of Category
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT SUM(" + expAmt + ") FROM " + TABLE_EXP;
+        String query = "SELECT SUM(" + expAmt + ") FROM " + TABLE_EXP  + " WHERE " + expDate + " LIKE '%" + month + "-%%-" + year + "'";;
         Cursor data = db.rawQuery(query, null);
         data.moveToNext();
         String result = String.valueOf(formatter.format(data.getDouble(0)));

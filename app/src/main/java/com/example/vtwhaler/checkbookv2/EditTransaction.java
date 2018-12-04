@@ -1,6 +1,8 @@
 package com.example.vtwhaler.checkbookv2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -44,7 +46,7 @@ public class EditTransaction extends AppCompatActivity  {
         mDatabaseHelper = new DatabaseHelper(this);
 
         String extra[] = getIntent().getExtras().get("id").toString().split(",");
-        toastMessage(getIntent().getExtras().get("id").toString());
+        //toastMessage(getIntent().getExtras().get("id").toString());
 
         final int id = Integer.parseInt(getIntent().getExtras().get("id").toString());
         String category = mDatabaseHelper.getExpCat(id);
@@ -96,15 +98,46 @@ public class EditTransaction extends AppCompatActivity  {
                 } catch (NumberFormatException c) {
                     toastMessage("You must put something in the text field!"); //error catch for when amt is blank
                 }
+                finish();
             }
         });
 
-//        btnDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                toastMessage("" + id);
-//            }
-//        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                mDatabaseHelper.addBal(Double.parseDouble(mDatabaseHelper.getExpAmt(id)));
+                                finish();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                finish();
+                                break;
+                        }
+
+                        boolean result = mDatabaseHelper.deleteTransaction(id);
+                        if(result == true) {
+                            toastMessage("Transaction Deleted!");
+                        }
+                        else {
+                            toastMessage("Woops! Something went wrong!");
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Do you want to add this back into your balance?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+                }
+        });
 
     }
 

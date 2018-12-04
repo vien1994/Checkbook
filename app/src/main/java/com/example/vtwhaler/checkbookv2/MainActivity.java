@@ -17,21 +17,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
-
     DatabaseHelper mDatabaseHelper;
     Jokes joke = new Jokes();
     private Button btnAdd, btnViewData, btnDeleteAll, btnFood;
-    private EditText editTextAmt, editTextCat, editTextTag;
+    private EditText editTextAmt, editTextTag;
+    private AutoCompleteTextView editTextCat;
     private TextView textBalance, textJoke;
 
     private String jokeString;
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         editTextAmt = (EditText) findViewById(R.id.editTextAmt);
-        editTextCat = (EditText) findViewById(R.id.editTextCat);
+        editTextCat = (AutoCompleteTextView) findViewById(R.id.editTextCat);
         editTextTag = (EditText) findViewById(R.id.editTextTag);
         btnAdd = (Button) findViewById(R.id.button_submit);
         btnViewData = (Button) findViewById(R.id.buttonView);
@@ -82,6 +86,13 @@ public class MainActivity extends AppCompatActivity
         }
 
         updateTextBal();
+
+        String[] categories = getResources().getStringArray(R.array.categories);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
+        editTextCat.setAdapter(adapter);
+
+        checkProgress();
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +155,13 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+// FINISH HERE
+    public void checkProgress() {
+        Calendar now = Calendar.getInstance();
+
+
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -200,6 +218,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id== R.id.nav_misc) {
             Intent intent = new Intent(MainActivity.this, ListMiscActivity.class);
             startActivity(intent);
+        } else if (id==R.id.nav_progress) {
+            Intent intent = new Intent(MainActivity.this, ListProgress.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -208,15 +229,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void deleteData() {
-        boolean delete = mDatabaseHelper.deleteAllData();
+        mDatabaseHelper.deleteAllData();
         updateTextBal();
 
-        if (delete) {
-            toastMessage("All Data Successfully Deleted!");
-        }
-        else {
-            toastMessage("Oops! Something went wrong");
-        }
+        toastMessage("Deleted?");
     }
 
     public void AddData(String category, double amount, String tag) {

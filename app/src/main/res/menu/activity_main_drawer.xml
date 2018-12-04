@@ -37,6 +37,11 @@
             android:icon="@drawable/ic_misc"
             android:title="Misc" />
 
+        <item
+        android:id="@+id/nav_progress"
+        android:icon="@drawable/ic_misc"
+        android:title="Progress" />
+
 
     </group>
 

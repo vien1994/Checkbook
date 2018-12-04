@@ -109,4 +109,11 @@ public class ListGasActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        this.recreate();
+    }
+
+
 }

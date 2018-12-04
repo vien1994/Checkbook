@@ -33,5 +33,14 @@
     <string name="updateButton">Update</string>
     <string name="details">Details:</string>
     <string name="delete">Delete</string>
+    <string name="Progress" >Progress</string>
+
+    <string-array name="categories">
+        <item>Food</item>
+        <item>Entertainment</item>
+        <item>Transportation</item>
+        <item>Bills</item>
+        <item>Misc</item>
+    </string-array>
 
 </resources>

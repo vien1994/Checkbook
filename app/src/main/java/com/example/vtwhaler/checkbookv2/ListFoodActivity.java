@@ -105,4 +105,10 @@ public class ListFoodActivity extends ParentListClass {
         super.toastMessage(msg);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        this.recreate();
+    }
+
 }

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,11 +24,7 @@ import static com.example.vtwhaler.checkbookv2.Constants.ID_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.SECOND_COLUMN;
 import static com.example.vtwhaler.checkbookv2.Constants.THIRD_COLUMN;
 
-/**
- * Created by VTWhaler on 8/12/2017.
- */
-
-public class ListMiscActivity extends AppCompatActivity {
+public class ListProgress extends AppCompatActivity {
 
     private ArrayList<HashMap<String, String>> list;
     private static final String TAG = "ListDataActivity";
@@ -40,17 +37,19 @@ public class ListMiscActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_layout);
-        mListView = (ListView) findViewById(R.id.listView);
-        textTotal = (TextView) findViewById(R.id.textTotal);
+        setContentView(R.layout.progress);
+        mListView = (ListView) findViewById(R.id.amtSavedList);
+        //textTotal = (TextView) findViewById(R.id.textTotal);
         mDatabaseHelper = new DatabaseHelper(this);
 
-        populateListView();
+        mDatabaseHelper.initProgress();
 
+        populateListView();
+/*
         mListView.setOnItemClickListener ( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
-                Intent intent = new Intent(ListMiscActivity.this, EditTransaction.class);
+                Intent intent = new Intent(ListBillsActivity.this, EditTransaction.class);
                 int num = 0;
                 String item = mListView.getItemAtPosition(position).toString();
                 String itemParts[] = item.split(",");
@@ -74,31 +73,27 @@ public class ListMiscActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
-        });
+        }); */
     }
 
     private void populateListView() {
-        Log.d(TAG, "populateListView: Displaying data in the ListView");
 
-        Cursor data = mDatabaseHelper.getMisc();
+        Cursor data = mDatabaseHelper.getProgress();
         list = new ArrayList<HashMap<String,String>>();
         while(data.moveToNext()) {
 
             HashMap<String,String> temp=new HashMap<String, String>();
-            temp.put(ID_COLUMN, data.getString(0)); //ID
-            temp.put(FIRST_COLUMN, data.getString(4)); //Date
-            temp.put(SECOND_COLUMN, data.getString(1)); //Category (Such as food)
-            temp.put(THIRD_COLUMN, data.getString(3)); //Details of Transaction
-            temp.put(FOURTH_COLUMN, String.valueOf(formatter.format(data.getDouble(2)))); //Amount Spent
+            temp.put(FIRST_COLUMN, data.getString(1)); //ID
+            temp.put(SECOND_COLUMN, String.valueOf(formatter.format(data.getDouble(2)))); //Amount Spent
             list.add(temp);
 
         }
         data.close();
 
-        String total = "Total: " + mDatabaseHelper.getTotal("misc");
-        textTotal.setText(total);
+        //String total = "Total: " + mDatabaseHelper.getTotal("bills");
+        //textTotal.setText(total);
 
-        ListViewAdapters adapter = new ListViewAdapters(this, list);
+        ListProgressAdapter adapter = new ListProgressAdapter(this, list);
         mListView.setAdapter(adapter);
 
     }
@@ -112,5 +107,6 @@ public class ListMiscActivity extends AppCompatActivity {
         super.onRestart();
         this.recreate();
     }
+
 
 }
