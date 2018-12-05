@@ -69,26 +69,89 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+//PROGRESS TABLE HERE
 
-
+    //This is for testing purposes
     public void initProgress() {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(monthID, "January");
-        contentValues.put(amtSaved, 12);
+        contentValues.put(monthID, "January 2018");
+        contentValues.put(amtSaved, -12);
 
         db.insert(TABLE_PROGRESS, null, contentValues);
     }
 
-    public Cursor getProgress() {
+    public Cursor getProgressByYear(String year) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_PROGRESS;
+        String query = "SELECT * FROM " + TABLE_PROGRESS+ " WHERE " + monthID + " LIKE '%" + year + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }
 
+    //ProgressCheck returns true if the app has updated already
+    public boolean progressCheck(int month, int year) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String monthString = convertMonth(month);
+
+        String query = "SELECT * FROM " + TABLE_PROGRESS+ " WHERE " + monthID + " LIKE '%" + monthString + "%" + year +"'";
+        Cursor data = db.rawQuery(query, null);
+        if(data.getCount() == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public String convertMonth(int month) {
+        String monthString = "";
+        switch (month) {
+            case 1:  monthString = "January";
+                break;
+            case 2:  monthString = "February";
+                break;
+            case 3:  monthString = "March";
+                break;
+            case 4:  monthString = "April";
+                break;
+            case 5:  monthString = "May";
+                break;
+            case 6:  monthString = "June";
+                break;
+            case 7:  monthString = "July";
+                break;
+            case 8:  monthString = "August";
+                break;
+            case 9:  monthString = "September";
+                break;
+            case 10: monthString = "October";
+                break;
+            case 11: monthString = "November";
+                break;
+            case 12: monthString = "December";
+                break;
+        }
+
+        return monthString;
+    }
+
+    public void insertProgress(int month, int year, double balance) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues val = new ContentValues();
+        String monthString = convertMonth(month);
+
+        val.put(monthID, monthString + " " + year);
+        val.put(amtSaved, balance);
+
+        db.insert(TABLE_PROGRESS, null, val);
+
+    }
+
+
+    //PROGRESS TABLE ENDS HERE
 
 
 
@@ -210,6 +273,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         data.moveToNext();
         addBal(data.getDouble(0)); //Adds transaction total back to Balance
         db.execSQL("delete from "+ TABLE_EXP);
+        db.execSQL("delete from " + TABLE_PROGRESS);
+        //db.execSQL("delete from " + TABLE_BALANCE);
 
     }
 
@@ -238,10 +303,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public Cursor getBills() { //Grab all the transactions to view under Bills Category
+    public Cursor getBills(String month, String year) { //Grab all the transactions to view under Bills Category
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='bills'";
+        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='bills' AND " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -254,35 +319,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public Cursor getEntertainment() { //Grab all the transactions to view under Entertainment Category
+    public Cursor getEntertainment(String month, String year) { //Grab all the transactions to view under Entertainment Category
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='entertainment'";
+        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='entertainment' AND " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }
 
-    public Cursor getFood() { //Grab all the transactions to view under Food Category
+    public Cursor getFood(String month, String year) { //Grab all the transactions to view under Food Category
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='food'";
+        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='food' AND " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
 
     }
 
-    public Cursor getGas() { //Grab all the transactions to view under Gas Category
+    public Cursor getGas(String month, String year) { //Grab all the transactions to view under Gas Category
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='transportation'";
+        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='transportation' AND " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }
 
-    public Cursor getMisc() { //Grab all the transactions to view under Misc Category
+    public Cursor getMisc(String month, String year) { //Grab all the transactions to view under Misc Category. CHANGE IT SO ITS EVERYTHING ELSE TOO
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='misc'";
+        String query = "SELECT * FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='misc' AND " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
         Cursor data = db.rawQuery(query, null);
         return data;
     }

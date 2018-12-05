@@ -145,7 +145,6 @@ public class ListDataActivity extends AppCompatActivity {
         Log.d(TAG, "populateListView: Displaying data in the ListView");
 
         Cursor data = mDatabaseHelper.getDataByMonth(curMonth, curYear);
-        toastMessage(curMonth + " " + curYear);
         //Cursor data = mDatabaseHelper.getData();
         list = new ArrayList<HashMap<String,String>>();
         while(data.moveToNext()) {

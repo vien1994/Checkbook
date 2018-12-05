@@ -125,24 +125,11 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextAmt" />
 
-    <Button
-        android:id="@+id/button_deleteAll"
-        android:layout_width="325dp"
-        android:layout_height="74dp"
-        android:layout_marginTop="14dp"
-        android:text="@string/delete_all"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_submit"
-        tools:layout_editor_absoluteY="261dp" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="134dp"
         android:layout_height="39dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/textViewBalance"
@@ -153,22 +140,25 @@
         app:layout_constraintHorizontal_bias="0.305"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_deleteAll"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_submit"
+        app:layout_constraintVertical_bias="0.108" />
 
     <TextView
         android:id="@+id/textBalance"
         android:layout_width="159dp"
         android:layout_height="39dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
         android:textColor="@android:color/black"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintLeft_toRightOf="@+id/textView4"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.4" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/textViewJoke"

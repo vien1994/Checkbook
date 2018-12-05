@@ -1,7 +1,9 @@
 package com.example.vtwhaler.checkbookv2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         editTextTag = (EditText) findViewById(R.id.editTextTag);
         btnAdd = (Button) findViewById(R.id.button_submit);
         btnViewData = (Button) findViewById(R.id.buttonView);
-        btnDeleteAll = (Button) findViewById(R.id.button_deleteAll);
+        //btnDeleteAll = (Button) findViewById(R.id.button_deleteAll);
         textBalance = (TextView) findViewById(R.id.textBalance);
         textJoke = (TextView) findViewById(R.id.textViewJoke);
         mDatabaseHelper = new DatabaseHelper(this);
@@ -126,13 +128,15 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        /* This is old for resetting data and an old no longer existing button
         btnDeleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteData();
             }
         });
-
+*/
 
 
         // ShakeDetector initialization
@@ -157,9 +161,24 @@ public class MainActivity extends AppCompatActivity
 
 // FINISH HERE
     public void checkProgress() {
+
+        //Calendar.MONTH starts at 0. So 11 is December, but we're treating it like November anyways since we only want to check the previous month.
         Calendar now = Calendar.getInstance();
+        int month = now.get(Calendar.MONTH) ;
+        int year = now.get(Calendar.YEAR);
+
+        if(month == 0) {
+            month = 12;
+        }
 
 
+        boolean isChecked = mDatabaseHelper.progressCheck(month, year);
+
+        if(isChecked == false) {
+            mDatabaseHelper.insertProgress(month, year, mDatabaseHelper.getBal());
+            mDatabaseHelper.resetBal();
+            toastMessage("Previous Budget Saved AND your balance was reset (;");
+        }
     }
 
     @Override
@@ -221,7 +240,33 @@ public class MainActivity extends AppCompatActivity
         } else if (id==R.id.nav_progress) {
             Intent intent = new Intent(MainActivity.this, ListProgress.class);
             startActivity(intent);
+        } else if(id==R.id.nav_reset) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            deleteData();
+                            //finish();
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            finish();
+                            break;
+                    }
+
+
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to reset everything?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -232,7 +277,7 @@ public class MainActivity extends AppCompatActivity
         mDatabaseHelper.deleteAllData();
         updateTextBal();
 
-        toastMessage("Deleted?");
+        toastMessage("Checkbook has been reset");
     }
 
     public void AddData(String category, double amount, String tag) {

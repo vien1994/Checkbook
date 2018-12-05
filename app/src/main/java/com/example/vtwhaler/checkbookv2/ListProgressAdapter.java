@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class ListProgressAdapter extends BaseAdapter {
     Activity activity;
     TextView txtFirst;
     TextView txtSecond;
+    ImageView imgThird;
+
 
 
     public ListProgressAdapter (Activity activity, ArrayList<HashMap<String, String>> list){
@@ -54,10 +57,16 @@ public class ListProgressAdapter extends BaseAdapter {
 
         txtFirst=(TextView) convertView.findViewById(R.id.progressMonth); //Have this section outside of if statement to avoid scrolling bug
         txtSecond=(TextView) convertView.findViewById(R.id.progressAmt);
+        imgThird = (ImageView) convertView.findViewById(R.id.pusheen_result);
 
         HashMap<String, String> map=list.get(position);
         txtFirst.setText(map.get(FIRST_COLUMN)); // First column is the Date
         txtSecond.setText(map.get(SECOND_COLUMN)); // Second column is the amt
+
+        if(Double.parseDouble(map.get(SECOND_COLUMN)) < 0) {
+            imgThird.setImageResource(R.drawable.pusheen_sad);
+        }
+
 
         return convertView;
     }

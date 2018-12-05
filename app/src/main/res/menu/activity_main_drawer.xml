@@ -39,8 +39,13 @@
 
         <item
         android:id="@+id/nav_progress"
-        android:icon="@drawable/ic_misc"
+        android:icon="@drawable/ic_progress"
         android:title="Progress" />
+
+        <item
+            android:id="@+id/nav_reset"
+            android:icon="@drawable/ic_fire"
+            android:title="Reset" />
 
 
     </group>
