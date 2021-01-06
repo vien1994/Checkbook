@@ -352,9 +352,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public String getTotal(String info) { //Grabs the sum of a requested Category
+    public String getTotal(String info, String month, String year) { //Grabs the sum of a requested Category
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT SUM(" + expAmt + ") FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='" + info + "'";
+        String query = "SELECT SUM(" + expAmt + ") FROM " + TABLE_EXP + " WHERE lower(" + expCat + ")='" + info + "' AND " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
         Cursor data = db.rawQuery(query, null);
         data.moveToNext();
         String result = String.valueOf(formatter.format(data.getDouble(0)));
@@ -363,7 +363,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getAllTotal(String month, String year) { //Grabs the sum of all transactions regardless of Category
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT SUM(" + expAmt + ") FROM " + TABLE_EXP  + " WHERE " + expDate + " LIKE '%" + month + "-%%-" + year + "'";;
+        String query = "SELECT SUM(" + expAmt + ") FROM " + TABLE_EXP  + " WHERE " + expDate + " LIKE '%" + month + "-%%-" + year + "'";
         Cursor data = db.rawQuery(query, null);
         data.moveToNext();
         String result = String.valueOf(formatter.format(data.getDouble(0)));

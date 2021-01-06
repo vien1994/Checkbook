@@ -175,7 +175,7 @@ public class ListGasActivity extends AppCompatActivity {
         }
         data.close();
 
-        String total = "Total: " + mDatabaseHelper.getTotal("gas"); //change to transportation later
+        String total = "Total: " + mDatabaseHelper.getTotal("transportation", curMonth, curYear);
         textTotal.setText(total);
 
         ListViewAdapters adapter = new ListViewAdapters(this, list);

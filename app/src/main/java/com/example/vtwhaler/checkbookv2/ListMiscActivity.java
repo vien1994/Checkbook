@@ -173,7 +173,7 @@ public class ListMiscActivity extends AppCompatActivity {
         }
         data.close();
 
-        String total = "Total: " + mDatabaseHelper.getTotal("misc");
+        String total = "Total: " + mDatabaseHelper.getTotal("misc", curMonth, curYear);
         textTotal.setText(total);
 
         ListViewAdapters adapter = new ListViewAdapters(this, list);

@@ -9,7 +9,7 @@ public class Jokes {
     private static String result;
 
     public String getJoke() {
-        int randNum = (int) Math.floor(Math.random() * 94); //num of options including 0. ex: *95 means up to case 94.
+        int randNum = (int) Math.floor(Math.random() * 95); //num of options including 0. ex: *95 means up to case 94.
         switch (randNum) {
             case 0:
                 result= "a";
@@ -21,7 +21,7 @@ public class Jokes {
                 result= "What's the funniest candy bar?\n\nSnickers." ;
                 break;
             case 3:
-                result= "Why you shaking me punk?";
+                result= "I'm shook";
                 break;
             case 4:
                 result= "Why aren't Koalas actual bears?\n\nBecause they don't meet the Koalafications.";
@@ -294,7 +294,7 @@ public class Jokes {
                 result= "Is this the Krusty Krab?\n\nNo, this is Patrick.";
                 break;
             case 94:
-                result= "";
+                result= "If your boyfriend can't appreciate a good fruit pun, let that mango.";
                 break;
             case 95:
                 result= "";

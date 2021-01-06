@@ -172,7 +172,7 @@ public class ListFoodActivity extends ParentListClass {
         }
         data.close();
 
-        String total = "Total: " + mDatabaseHelper.getTotal("food");
+        String total = "Total: " + mDatabaseHelper.getTotal("food", curMonth, curYear);
         textTotal.setText(total);
 
         ListViewAdapters adapter = new ListViewAdapters(this, list);

@@ -173,7 +173,7 @@ public class ListEntertainmentActivity extends AppCompatActivity {
         }
         data.close();
 
-        String total = "Total: " + mDatabaseHelper.getTotal("entertainment");
+        String total = "Total: " + mDatabaseHelper.getTotal("entertainment", curMonth, curYear);
         textTotal.setText(total);
 
         ListViewAdapters adapter = new ListViewAdapters(this, list); //Initialize to set as adapter

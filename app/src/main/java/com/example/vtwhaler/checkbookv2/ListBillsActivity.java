@@ -174,7 +174,7 @@ public class ListBillsActivity extends AppCompatActivity {
         }
         data.close();
 
-        String total = "Total: " + mDatabaseHelper.getTotal("bills");
+        String total = "Total: " + mDatabaseHelper.getTotal("bills", curMonth, curYear);
         textTotal.setText(total);
 
         ListViewAdapters adapter = new ListViewAdapters(this, list);

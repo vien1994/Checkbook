@@ -72,7 +72,7 @@ public class ParentListClass extends AppCompatActivity {
             }
             data.close();
 
-            String total = "Total: " + mDatabaseHelper.getTotal("food");
+            String total = "Total: " + mDatabaseHelper.getTotal("food", "", "");
             textTotal.setText(total);
 
             ListViewAdapters adapter = new ListViewAdapters(this, list);
